@@ -1,5 +1,3 @@
-console.log("Refactor ihtiyaci olabilir :)");
-
 const data = [
 	{
 		"name": "Abdulkadir Çelebi",
@@ -213,54 +211,34 @@ const data = [
 	}
 ]
 
+let assistants = data.filter(d => d.type != null).map(a => a.name)
+let groups = []
 
-var assistants = []
-var groups = []
-for(let i = 0; i < data.length; i++){
-    if(data[i].type !== null){
-        assistants.push(data[i].name)
-    }
-    groups.push(data[i].group)
-}   
+data.map(d => {
+	if (groups.indexOf(d.group) === -1) {
+		groups.push(d.group)
+	}
+})
 
-
-var uniqueAssistants = assistants.filter(onlyUnique);
-var uniqueGroups = groups.filter(onlyUnique);
-
-
-function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
+function getStudentsForGroupName(groupName) {
+	let students = data.filter(d => d.group === groupName).map(s => s.name)
+	return students;
 }
 
-
-function getGroupStudents(groupName){
-    let result = {}
-    result.group = groupName
-    let groupMembersName = []
-    let assistantName = null;
-    
-    for (let i = 0; i < data.length; i++) {
-        if(data[i].group === groupName){
-            groupMembersName.push(data[i].name)
-            if(data[i].type !== null){
-                assistantName = data[i].name
-            }
-        }
-        
-    }
-    result.student = groupMembersName
-    result.assistant = assistantName
-
-   return result;
+function getAssistantForGroupName(groupName) {
+	let assistant = data.filter(d => d.group === groupName).filter(s => s.type != null).map(a => a.name)
+	return assistant;
 }
 
-function getResult(){
-    let result = []
-    for (let k = 0; k < uniqueGroups.length; k++) {
-        let value = getGroupStudents(uniqueGroups[k])
-        result.push(value)
-    }
-    console.log(result);
+function createResult(groupName) {
+	let students = getStudentsForGroupName(groupName)
+	let assistant = getAssistantForGroupName(groupName)
+	let result = {
+		"groupName": groupName,
+		"students": students,
+		"assistant": assistant
+	}
+	return result;
 }
-
-getResult();
+let result = groups.map(g => createResult(g))
+console.log(result);
