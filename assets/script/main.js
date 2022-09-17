@@ -2,11 +2,15 @@ import data from "../data/data.json"
 
 let groups = []
 
-data.map(d => {
-	if (groups.indexOf(d.group) === -1) {
-		groups.push(d.group)
-	}
-})
+function findUniqueGroups(data) {
+	data.map(d => {
+		if (groups.indexOf(d.group) === -1) {
+			groups.push(d.group)
+		}
+	})
+}
+
+findUniqueGroups(data);
 
 function getStudentsForGroupName(groupName, data) {
 	let students = data.filter(d => d.group === groupName && d.type == null).map(s => s.name)
